@@ -1,0 +1,10 @@
+.ProductsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.Product {
+  flex-basis: 30%;
+  margin-bottom: 2em;
+}

@@ -1,0 +1,19 @@
+.StatusText {
+  font-weight: 700;
+}
+
+.CancelledStatus {
+  color: red;
+}
+
+.ConfirmedStatus {
+  color: blue;
+}
+
+.DeliveredStatus {
+  color: green;
+}
+
+.PendingStatus {
+  color: grey;
+}

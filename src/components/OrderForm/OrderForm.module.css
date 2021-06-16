@@ -1,0 +1,15 @@
+.OrderForm {
+  border: 1px solid grey;
+  border-radius: 1em;
+  padding: 2em;
+  height: 30em;
+  flex-basis: 45%;
+}
+
+.Title {
+  text-align: center;
+}
+
+.NotValidate {
+  border: red 1px solid !important;
+}

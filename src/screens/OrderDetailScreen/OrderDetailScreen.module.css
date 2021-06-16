@@ -1,0 +1,8 @@
+.Cancel {
+  color: red;
+  font-weight: 600;
+}
+
+.Cancel:hover {
+  cursor: pointer;
+}

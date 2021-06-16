@@ -1,0 +1,7 @@
+.ActiveCategory {
+  font-weight: 700;
+}
+
+.ActiveCategory:active, .ActiveCategory:hover {
+  color: black;
+}

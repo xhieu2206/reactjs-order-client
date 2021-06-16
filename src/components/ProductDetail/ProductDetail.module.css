@@ -1,0 +1,20 @@
+.ProductDetail {
+  display: flex;
+  border: 1px solid grey;
+  border-radius: 1em;
+  padding: 2em;
+  height: 25em;
+  flex-basis: 45%;
+}
+
+.ProductDetail .ProductImage {
+  height: 3em;
+}
+
+.ProductImage img {
+  height: 20em;
+}
+
+.ProductDetail .ProductInformation {
+  padding-top: 1em;
+}
