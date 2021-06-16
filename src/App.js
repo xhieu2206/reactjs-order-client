@@ -20,6 +20,7 @@ const App = props => {
       onTryLogin(token, user);
     }
   }, [onTryLogin]);
+
   return (
     <div>
       <Layout>

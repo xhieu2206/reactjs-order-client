@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import classes from './OrderForm.module.css';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
-import {ENTRY_POINT} from '../../constants/URLs';
-import {withRouter} from 'react-router-dom';
+import { ENTRY_POINT } from '../../constants/URLs';
+import { withRouter } from 'react-router-dom';
 
 const OrderForm = (props) => {
   const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const OrderForm = (props) => {
   const [address, setAddress] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
+  const { token } = props;
   const [validation, setValidation] = useState({
     email: {
       isValidate: true
@@ -45,6 +47,10 @@ const OrderForm = (props) => {
         customerName: name,
         phone,
         email
+      }, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       })
         .then(res => {
           console.log('Create new order successfully');
@@ -54,7 +60,7 @@ const OrderForm = (props) => {
             props.history.push(`/orders/${res.data.id}`);
           }, 4000);
         })
-        .catch(e => console.log('Error while creating new order'));
+        .catch(() => console.log('Error while creating new order'));
     }
   }
 
@@ -131,4 +137,10 @@ const OrderForm = (props) => {
   )
 };
 
-export default withRouter(OrderForm);
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token
+  }
+}
+
+export default withRouter(connect(mapStateToProps, null)(OrderForm));

@@ -7,15 +7,20 @@ import { Link } from 'react-router-dom';
 import authGuard from '../../hoc/AuthGuard/AuthGuard';
 import {connect} from 'react-redux';
 
-const OrderList = (props) => {
+const OrderList = props => {
   const [orders, setOrders] = useState([]);
+  const { token } = props;
 
   useEffect(() => {
-    axios.get(`${ENTRY_POINT}/orders`)
+    axios.get(`${ENTRY_POINT}/orders`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
       .then(({data}) => {
         setOrders(data);
       })
-  }, []);
+  }, [token]);
 
   return (
     <div className="container">
@@ -70,7 +75,8 @@ const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
-    isLoggedIn: state.auth.isLoggedIn
+    isLoggedIn: state.auth.isLoggedIn,
+    token: state.auth.token
   }
 }
 

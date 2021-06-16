@@ -16,7 +16,6 @@ function* loginUser(action) {
     localStorage.setItem('user', JSON.stringify(res.data.user));
     yield put(loginSuccess(res.data.access_token, res.data.user));
   } catch(e) {
-    console.log(e.response.data.message);
     yield put(loginFailed(e.response.data.message));
   }
 }

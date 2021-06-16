@@ -3,36 +3,48 @@ import { useLocation, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import classes from './OrderDetailScreen.module.css';
-import {ENTRY_POINT} from '../../constants/URLs';
+import { ENTRY_POINT } from '../../constants/URLs';
+import { connect } from 'react-redux';
 
 const OrderDetailScreen = (props) => {
   const [order, setOrder] = useState({});
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
   const location = useLocation();
-  const { match } = props;
+  const { match, token } = props;
 
   useEffect(() => {
-    axios.get(`${ENTRY_POINT}/orders/${match.params.id}`)
-      .then(res => {
-        setOrder(res.data);
-      })
-  }, [location, match]);
+    axios.get(`${ENTRY_POINT}/orders/${match.params.id}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }).then(res => {
+      setOrder(res.data);
+    }).catch(() => console.log('Error while getting order detail'));
+  }, [location, match, token]);
 
   const onCancelOrderClickedHandler = () => {
     setIsProcessingOrder(true);
     axios.put(`${ENTRY_POINT}/orders/${match.params.id}`, {
       ...order,
       status: 'cancelled'
+    }, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     })
-      .then(({ data }) => {
-        setTimeout(() => {
-          setIsProcessingOrder(false);
-          axios.get(`${ENTRY_POINT}/orders/${data.id}`)
-            .then(({ data }) => {
-              setOrder(data);
-            })
-        }, 2000)
-      })
+    .then(({ data }) => {
+      setTimeout(() => {
+        setIsProcessingOrder(false);
+        axios.get(`${ENTRY_POINT}/orders/${data.id}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+          .then(({ data }) => {
+            setOrder(data);
+          })
+      }, 2000)
+    })
   }
 
   return (
@@ -83,4 +95,10 @@ const OrderDetailScreen = (props) => {
   )
 };
 
-export default withRouter(OrderDetailScreen);
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token
+  }
+}
+
+export default withRouter(connect(mapStateToProps, null)(OrderDetailScreen));
