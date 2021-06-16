@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, withRouter } from 'react-router-dom';
-import axios from 'axios';
-
-import classes from './OrderDetailScreen.module.css';
-import { ENTRY_POINT } from '../../constants/URLs';
 import { connect } from 'react-redux';
+
+import classes from './order-detail-screen.module.css';
+import OrderService from '../../services/order.service';
 
 const OrderDetailScreen = (props) => {
   const [order, setOrder] = useState({});
@@ -13,38 +12,32 @@ const OrderDetailScreen = (props) => {
   const { match, token } = props;
 
   useEffect(() => {
-    axios.get(`${ENTRY_POINT}/orders/${match.params.id}`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
+    const orderService = new OrderService();
+    async function fetchOrder() {
+      const data = await orderService.get(match.params.id, token);
+      if (!data.error) {
+        setOrder(data);
+      } else {
+        console.log(data.error);
       }
-    }).then(res => {
-      setOrder(res.data);
-    }).catch(() => console.log('Error while getting order detail'));
+    }
+
+    fetchOrder();
   }, [location, match, token]);
 
-  const onCancelOrderClickedHandler = () => {
+  const onCancelOrderClickedHandler = async () => {
+    const orderService = new OrderService();
     setIsProcessingOrder(true);
-    axios.put(`${ENTRY_POINT}/orders/${match.params.id}`, {
-      ...order,
-      status: 'cancelled'
-    }, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-    .then(({ data }) => {
-      setTimeout(() => {
+    const data = await orderService.cancelOrder(order, token)
+    if (!data.error) {
+      setTimeout(async () => {
         setIsProcessingOrder(false);
-        axios.get(`${ENTRY_POINT}/orders/${data.id}`, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        })
-          .then(({ data }) => {
-            setOrder(data);
-          })
-      }, 2000)
-    })
+        const cancelOrder = await orderService.get(data.id, token);
+        setOrder(cancelOrder);
+      }, 2000);
+    } else {
+      console.log(data.error);
+    }
   }
 
   return (

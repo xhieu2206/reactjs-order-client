@@ -1,13 +1,14 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import classes from './NavigationItems.module.css';
+import classes from './navigation-items.module.css';
 import { logout } from '../../../store/actions/auth';
 
 const NavigationItems = props => {
   const onLogoutClickedHandler = () => {
     props.onLogout();
+    props.history.push('/categories');
   }
 
   let items = (
@@ -43,4 +44,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(NavigationItems);
+export default withRouter(connect(null, mapDispatchToProps)(NavigationItems));

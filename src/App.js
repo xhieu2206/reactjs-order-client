@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react';
-import Layout from './hoc/Layout/Layout';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Create from './screens/Create/Create';
-import Category from './screens/Category/Category';
-import OrderDetailScreen from './screens/OrderDetailScreen/OrderDetailScreen';
-import OrderList from './screens/OrderList/OrderList';
-import Login from './screens/Login/Login';
+import Layout from './hoc/layout/layout';
+import Create from './screens/create/create';
+import Category from './screens/category/category';
+import OrderDetailScreen from './screens/orderDetailScreen/order-detail-screen';
+import OrderList from './screens/orderList/order-list';
+import Login from './screens/login/login';
 import { loginSuccess } from './store/actions/auth';
+import { getCookie } from './utils/cookieUtil';
 
 const App = props => {
   const { onTryLogin } = props;
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
+    const token = getCookie('token');
+    const user = JSON.parse(getCookie('user'))
     if (token && user) {
       onTryLogin(token, user);
     }
@@ -31,6 +32,7 @@ const App = props => {
           <Route path="/orders/:id" component={OrderDetailScreen} />
           <Route path="/orders" component={OrderList} />
           <Route path="/login" component={Login} />
+          <Redirect to="/categories" />
         </Switch>
       </Layout>
     </div>

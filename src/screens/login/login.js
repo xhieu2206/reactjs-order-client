@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import classes from '../../components/OrderForm/OrderForm.module.css';
+import classes from '../../components/orderForm/order-form.module.css';
 import { login } from '../../store/actions/auth';
 import { withRouter } from 'react-router-dom';
-import authGuard from '../../hoc/AuthGuard/AuthGuard';
+import authGuard from '../../hoc/authGuard/auth-guard';
 
 const Login = (props) => {
   const [username, setUsername] = useState('admin');

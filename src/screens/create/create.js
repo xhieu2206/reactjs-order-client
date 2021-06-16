@@ -3,11 +3,11 @@ import { useLocation, withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
-import ProductDetail from '../../components/ProductDetail/ProductDetail';
-import authGuard from '../../hoc/AuthGuard/AuthGuard';
-import OrderForm from '../../components/OrderForm/OrderForm';
-import {ENTRY_POINT} from '../../constants/URLs';
-import classes from './Create.module.css'
+import ProductDetail from '../../components/productDetail/product-detail';
+import authGuard from '../../hoc/authGuard/auth-guard';
+import OrderForm from '../../components/orderForm/order-form';
+import { ENTRY_POINT } from '../../constants/URLs';
+import classes from './create.module.css'
 
 const Create = (props) => {
   const [product, setProduct] = useState({});

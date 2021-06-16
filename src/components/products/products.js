@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import classes from './Products.module.css';
+import classes from './products.module.css';
 
 const Products = props => {
   return (

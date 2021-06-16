@@ -1,8 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import Brand from './Brand/Brand';
-import NavigationItems from './NavigationItems/NavigationItems';
+import Brand from './brand/brand';
+import NavigationItems from './navigationItems/navigation-items';
 
 const Header = props => {
   const { isLoggedIn, user } = props

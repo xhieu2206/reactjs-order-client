@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './ProductDetail.module.css';
+import classes from './product-detail.module.css';
 
 const ProductDetail = (props) => (
   <div className={classes.ProductDetail}>

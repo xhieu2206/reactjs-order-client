@@ -1,25 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-
-import { ENTRY_POINT } from '../../constants/URLs';
-import classes from './OrderList.module.css';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import authGuard from '../../hoc/AuthGuard/AuthGuard';
-import {connect} from 'react-redux';
+
+import classes from './order-list.module.css';
+import authGuard from '../../hoc/authGuard/auth-guard';
+import OrderService from '../../services/order.service';
 
 const OrderList = props => {
   const [orders, setOrders] = useState([]);
   const { token } = props;
 
   useEffect(() => {
-    axios.get(`${ENTRY_POINT}/orders`, {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then(({data}) => {
+    const orderService = new OrderService();
+    async function fetchOrders() {
+      const data = await orderService.all(token);
+      if (!data.error) {
         setOrders(data);
-      })
+      } else {
+        console.log(data.error);
+      }
+    }
+
+    fetchOrders();
   }, [token]);
 
   return (

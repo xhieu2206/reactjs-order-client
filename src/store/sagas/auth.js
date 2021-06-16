@@ -14,6 +14,8 @@ function* loginUser(action) {
     });
     localStorage.setItem('token', res.data.access_token);
     localStorage.setItem('user', JSON.stringify(res.data.user));
+    document.cookie = `token=${res.data.access_token}`;
+    document.cookie = `user=${JSON.stringify(res.data.user)}`;
     yield put(loginSuccess(res.data.access_token, res.data.user));
   } catch(e) {
     yield put(loginFailed(e.response.data.message));

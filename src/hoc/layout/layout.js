@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../../components/Header/Header';
+import Header from '../../components/header/header';
 
 const Layout = props => (
   <div className="container-fluid">
-    <Header></Header>
+    <Header />
     <div className="container-fluid">
       {props.children}
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import classes from './Categories.module.css';
+import classes from './categories.module.css';
 
 const Categories = (props) => (
   <div className="col-2">

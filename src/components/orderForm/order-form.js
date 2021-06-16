@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import classes from './OrderForm.module.css';
-import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { ENTRY_POINT } from '../../constants/URLs';
-import { withRouter } from 'react-router-dom';
+import classes from './order-form.module.css';
+import OrderService from '../../services/order.service';
 
 const OrderForm = (props) => {
   const [email, setEmail] = useState('');
@@ -29,7 +28,7 @@ const OrderForm = (props) => {
     }
   })
 
-  const submittedFormHandler = () => {
+  const submittedFormHandler = async () => {
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const phoneRegex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
     const updateValidate = {...validation};
@@ -37,9 +36,10 @@ const OrderForm = (props) => {
     updateValidate.name.isValidate = name.length >= 3;
     updateValidate.phone.isValidate = phoneRegex.test(phone)
     updateValidate.address.isValidate = address.length >= 5;
-    setValidation(updateValidate)
+    setValidation(updateValidate);
+    const orderService = new OrderService();
     if (validation.email.isValidate && validation.name.isValidate && validation.address.isValidate && validation.phone.isValidate) {
-      axios.post(`${ENTRY_POINT}/orders`, {
+      const res = await orderService.create({
         productName: props.product.name,
         image: props.product.image,
         quantity,
@@ -47,20 +47,14 @@ const OrderForm = (props) => {
         customerName: name,
         phone,
         email
-      }, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          console.log('Create new order successfully');
-          setIsProcessingOrder(true);
-          setTimeout(() => {
-            setIsProcessingOrder(false);
-            props.history.push(`/orders/${res.data.id}`);
-          }, 4000);
-        })
-        .catch(() => console.log('Error while creating new order'));
+      }, token);
+      if (!res.error) {
+        setIsProcessingOrder(true);
+        setTimeout(() => {
+          setIsProcessingOrder(false);
+          props.history.push(`/orders/${res.id}`);
+        }, 3000);
+      }
     }
   }
 
