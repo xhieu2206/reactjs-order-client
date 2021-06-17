@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 import classes from './order-list.module.css';
 import authGuard from '../../hoc/authGuard/auth-guard';
 import OrderService from '../../services/order.service';
+import { showModal } from '../../store/actions/modal';
 
 const OrderList = props => {
   const [orders, setOrders] = useState([]);
-  const { token } = props;
+  const { token, openModal } = props;
 
   useEffect(() => {
     const orderService = new OrderService();
@@ -17,12 +18,12 @@ const OrderList = props => {
       if (!data.error) {
         setOrders(data);
       } else {
-        console.log(data.error);
+        openModal(data.error);
       }
     }
 
     fetchOrders();
-  }, [token]);
+  }, [token, openModal]);
 
   return (
     <div className="container">
@@ -37,7 +38,6 @@ const OrderList = props => {
             <th scope="col">Email</th>
             <th scope="col">Status</th>
             <th scope="col">
-
             </th>
           </tr>
         </thead>
@@ -82,4 +82,10 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, null)(authGuard(OrderList, true));
+const mapDispatchToProps = dispatch => {
+  return {
+    openModal: (message) => dispatch(showModal(message))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(authGuard(OrderList, true));

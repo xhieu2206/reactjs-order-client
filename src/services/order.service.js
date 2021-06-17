@@ -11,8 +11,9 @@ export default class OrderService {
       })
       return res.data;
     } catch(e) {
+      const error = e.response.data.message === 'Not Found' ? `You haven't had any orders yet` : 'Error while trying to get all the orders';
       return {
-        error: 'Error while trying to get all the orders'
+        error: error
       }
     }
   }

@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 import classes from './order-detail-screen.module.css';
 import OrderService from '../../services/order.service';
 import Button from '../../components/UI/Button/Button';
+import { showModal } from '../../store/actions/modal';
 
 const OrderDetailScreen = (props) => {
   const [order, setOrder] = useState({});
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
   const location = useLocation();
-  const { match, token } = props;
+  const { match, token, openModal } = props;
 
   useEffect(() => {
     const orderService = new OrderService();
@@ -19,12 +20,12 @@ const OrderDetailScreen = (props) => {
       if (!data.error) {
         setOrder(data);
       } else {
-        console.log(data.error);
+        openModal(data.error);
       }
     }
 
     fetchOrder();
-  }, [location, match, token]);
+  }, [location, match, token, openModal]);
 
   const onCancelOrderClickedHandler = async () => {
     const orderService = new OrderService();
@@ -37,7 +38,7 @@ const OrderDetailScreen = (props) => {
         setOrder(cancelOrder);
       }, 2000);
     } else {
-      console.log(data.error);
+      openModal(data.error);
     }
   }
 
@@ -77,7 +78,7 @@ const OrderDetailScreen = (props) => {
                   <p className={classes.Cancel}>Your order has been declined by our payment system</p> : null
               }
             </div>
-            {isProcessingOrder ? <div className="d-flex align-items-center">
+            {isProcessingOrder && !props.isModalDisplay ? <div className="d-flex align-items-center">
               <strong>Your order is cancelling</strong>
               <div className="spinner-border ms-auto" role="status" aria-hidden="true">
               </div>
@@ -91,8 +92,15 @@ const OrderDetailScreen = (props) => {
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.token
+    token: state.auth.token,
+    isModalDisplay: state.modal.isDisplay
   }
 }
 
-export default withRouter(connect(mapStateToProps, null)(OrderDetailScreen));
+const mapDispatchToProps = dispatch => {
+  return {
+    openModal: (message) => dispatch(showModal(message))
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OrderDetailScreen));

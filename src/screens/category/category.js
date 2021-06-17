@@ -6,21 +6,27 @@ import Categories from '../../components/categories/categories';
 import Products from '../../components/products/products';
 import CategoryService from '../../services/category.service';
 import ProductService from '../../services/product.service';
+import { showModal } from '../../store/actions/modal';
 
 const Category = props => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const location = useLocation();
+  const { openModal } = props;
 
   useEffect(() => {
     async function fetchCategories() {
       const categoryService = new CategoryService()
-      const categories = await categoryService.getCategories();
-      setCategories(categories);
+      const data = await categoryService.getCategories();
+      if (!data.error) {
+        setCategories(data);
+      } else {
+        openModal(data.error);
+      }
     }
 
     fetchCategories();
-  }, []);
+  }, [openModal]);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -54,4 +60,10 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, null)(Category));
+const mapDispatchToProps = dispatch => {
+  return {
+    openModal: (message) => dispatch(showModal(message))
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Category));

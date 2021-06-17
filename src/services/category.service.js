@@ -7,7 +7,9 @@ export default class CategoryService {
       const res = await axios.get(`${ENTRY_POINT}/categories`);
       return res.data;
     } catch(e) {
-      return e.response.data;
+      return {
+        error: 'Error while trying to get products'
+      };
     }
   }
 }
