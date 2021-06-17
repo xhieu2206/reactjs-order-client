@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import classes from './order-form.module.css';
 import OrderService from '../../services/order.service';
+import Input from '../UI/input/input';
+import Button from '../UI/Button/Button';
 
 const OrderForm = (props) => {
   const [email, setEmail] = useState('');
@@ -66,66 +68,54 @@ const OrderForm = (props) => {
         </div>
       </div> : null}
       <h3 className={classes.Title}>Create a new Order</h3>
-      <div className="mb-3 row">
-        <label htmlFor="inputEmail" className="col-sm-2 col-form-label">Email address</label>
-        <div className="col-sm-10">
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Your Email"
-            type="email"
-            className={['form-control', validation.email.isValidate ? '' : classes.NotValidate].join(' ').trim()}
-            id="inputEmail"
-          />
-          <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
-        </div>
-      </div>
 
-      <div className="mb-3 row">
-        <label htmlFor="inputName" className="col-sm-2 col-form-label">Name</label>
-        <div className="col-sm-10">
-          <input
-            value={name} onChange={(e) => setName(e.target.value)}
-            placeholder="Your Name" type="text"
-            className={['form-control', validation.name.isValidate ? '' : classes.NotValidate].join(' ').trim()}
-            id="inputName"
-          />
-        </div>
-      </div>
+      <Input
+        label="Your Email"
+        type="email"
+        isValidate={validation.email.isValidate}
+        value={email}
+        placeholder="Email"
+        changed={value => setEmail(value)}
+      />
 
-      <div className="mb-3 row">
-        <label htmlFor="inputPhone" className="col-sm-2 col-form-label">Phone Number</label>
-        <div className="col-sm-10">
-          <input
-            value={phone} onChange={(e) => setPhone(e.target.value)}
-            placeholder="Your Phone Number" type="text"
-            className={['form-control', validation.phone.isValidate ? '' : classes.NotValidate].join(' ').trim()}
-            id="inputPhone" />
-        </div>
-      </div>
+      <Input
+        label="Your Name"
+        type="text"
+        isValidate={validation.name.isValidate}
+        value={name}
+        placeholder="Your Name"
+        changed={value => setName(value)}
+      />
 
-      <div className="mb-3 row">
-        <label htmlFor="inputAddress" className="col-sm-2 col-form-label">Delivery Address</label>
-        <div className="col-sm-10">
-          <input
-            value={address} onChange={(e) => setAddress(e.target.value)}
-            placeholder="Your Address" type="text"
-            className={['form-control', validation.address.isValidate ? '' : classes.NotValidate].join(' ').trim()}
-            id="inputAddress" />
-        </div>
-      </div>
+      <Input
+        label="Phone Number"
+        type="text"
+        isValidate={validation.phone.isValidate}
+        value={phone}
+        placeholder="Your Phone Number"
+        changed={value => setPhone(value)}
+      />
 
-      <div className="mb-3 row">
-        <label htmlFor="inputQuantity" className="col-sm-2 col-form-label">Quantity</label>
-        <div className="col-sm-2">
-          <input
-            value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))}
-            type="number" className="form-control" id="inputQuantity" min="1" />
-        </div>
-      </div>
+      <Input
+        label="Delivery Address"
+        type="text"
+        isValidate={validation.address.isValidate}
+        value={address}
+        placeholder="Your Address"
+        changed={value => setAddress(value)}
+      />
+
+      <Input
+        label="Quantity"
+        type="number"
+        isValidate={true}
+        value={quantity}
+        changed={value => setQuantity(value)}
+        min="1"
+      />
 
       <div className="col-sm-12 text-end">
-        <button onClick={submittedFormHandler} type="submit" className="btn btn-primary">Submit</button>
+        <Button clicked={submittedFormHandler} type="primary" fullWidth={false}>Submit</Button>
       </div>
     </div>
   )

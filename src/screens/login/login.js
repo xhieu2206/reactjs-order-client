@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import classes from '../../components/orderForm/order-form.module.css';
 import { login } from '../../store/actions/auth';
 import { withRouter } from 'react-router-dom';
 import authGuard from '../../hoc/authGuard/auth-guard';
+import Input from '../../components/UI/input/input';
+import Button from '../../components/UI/Button/Button';
 
 const Login = (props) => {
   const [username, setUsername] = useState('admin');
@@ -35,11 +36,13 @@ const Login = (props) => {
     <div className="container">
       <div className="mb-3 row">
         <div className="col">
-          <button
-            type="button"
-            onClick={() => setIsDisplayCredential(!isDisplayCredential)}
-            className="btn btn-danger">click here to show pre-defined credential
-          </button>
+          <Button
+            type="danger"
+            clicked={() => setIsDisplayCredential(!isDisplayCredential)}
+            fullWidth={false}
+          >
+            click here to show pre-defined credential
+          </Button>
         </div>
       </div>
 
@@ -53,40 +56,37 @@ const Login = (props) => {
         </div> : null
       }
 
-      { error === 'Unauthorized' ?
-        <div className="alert alert-danger" role="alert">
-          Username or password is incorrect
-        </div> : null
+      {
+        error === 'Unauthorized' ?
+          <div className="alert alert-danger" role="alert">
+            Username or password is incorrect
+          </div> : null
       }
+
       <form>
-        <div className="mb-3 row">
-          <label className="col-sm-2 col-form-label">Username</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className={['form-control', validation.username.isValidate ? '' : classes.NotValidate].join(' ').trim()}
-              placeholder="Username"
-              name="username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="mb-3 row">
-          <label className="col-sm-2 col-form-label">Password</label>
-          <div className="col-sm-10">
-            <input
-              type="password"
-              className={['form-control', validation.password.isValidate ? '' : classes.NotValidate].join(' ').trim()}
-              name="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Username"
+          type="text"
+          isValidate={validation.username.isValidate}
+          value={username}
+          placeholder="Username"
+          changed={(value) => setUsername(value)}
+        />
+
+        <Input
+          label="Password"
+          type="password"
+          isValidate={validation.password.isValidate}
+          value={password}
+          placeholder="Password"
+          changed={value => setPassword(value)}
+        />
+
         <div className="mb-3 row">
           <div className="col-5">
           </div>
           <div className="col-2">
-            <button onClick={event => submittedFormHandler(event)} type="button" className="btn btn-primary w-100">Login</button>
+            <Button fullWidth={true} type="primary" clicked={event => submittedFormHandler(event)}>Login</Button>
           </div>
           <div className="col-5">
           </div>

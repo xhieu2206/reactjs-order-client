@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import classes from './order-detail-screen.module.css';
 import OrderService from '../../services/order.service';
+import Button from '../../components/UI/Button/Button';
 
 const OrderDetailScreen = (props) => {
   const [order, setOrder] = useState({});
@@ -62,10 +63,10 @@ const OrderDetailScreen = (props) => {
               <p className="card-text">
                 <strong>Order Status: </strong>
                 { order.status === 'cancelled' ?
-                  <button type="button" className="btn btn-danger">Cancelled</button> :
-                  order.status === 'confirmed' ? <button type="button" className="btn btn-primary">Confirmed</button> :
-                    order.status === 'delivered' ? <button type="button" className="btn btn-success">Delivered</button> :
-                      <button type="button" className="btn btn-secondary">Pending</button>
+                  <Button type="danger">Cancelled</Button>:
+                  order.status === 'confirmed' ? <Button type="primary">Confirmed</Button> :
+                    order.status === 'delivered' ? <Button type="success">Delivered</Button> :
+                      <Button type="secondary">Pending</Button>
                 }
               </p>
               { order.status === 'confirmed' ?
