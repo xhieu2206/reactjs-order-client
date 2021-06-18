@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -9,20 +9,8 @@ import OrderDetailScreen from './screens/orderDetailScreen/order-detail-screen';
 import OrderList from './screens/orderList/order-list';
 import Login from './screens/login/login';
 import { loginSuccess } from './store/actions/auth';
-import Cookies from 'js-cookie';
 
 const App = props => {
-  const { onTryLogin } = props;
-
-  // keep authentication status when refresh the page
-  useEffect(() => {
-    const token = Cookies.get('token');
-    const user = Cookies.get('user');
-    if (token && user) {
-      onTryLogin(token, user);
-    }
-  }, [onTryLogin]);
-
   let routes = (
     <Switch>
       <Route path="/categories/:categoryId" component={Category} exact={true} />

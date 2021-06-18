@@ -65,10 +65,10 @@ const OrderDetailScreen = (props) => {
               <p className="card-text">
                 <strong>Order Status: </strong>
                 { order.status === 'cancelled' ?
-                  <Button type="danger">Cancelled</Button>:
-                  order.status === 'confirmed' ? <Button type="primary">Confirmed</Button> :
-                    order.status === 'delivered' ? <Button type="success">Delivered</Button> :
-                      <Button type="secondary">Pending</Button>
+                  <Button clicked={() => {}} type="danger">Cancelled</Button>:
+                  order.status === 'confirmed' ? <Button clicked={() => {}} type="primary">Confirmed</Button> :
+                    order.status === 'delivered' ? <Button clicked={() => {}} type="success">Delivered</Button> :
+                      <Button clicked={() => {}} type="secondary">Pending</Button>
                 }
               </p>
               { order.status === 'confirmed' ?

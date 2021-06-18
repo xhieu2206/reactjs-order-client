@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -6,8 +6,10 @@ import classes from './order-form.module.css';
 import OrderService from '../../services/order.service';
 import Input from '../UI/input/input';
 import Button from '../UI/Button/Button';
+import MessageContext from '../../context/message-context';
 
 const OrderForm = (props) => {
+  const { open } = useContext(MessageContext);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -55,7 +57,9 @@ const OrderForm = (props) => {
         setTimeout(() => {
           setIsProcessingOrder(false);
           props.history.push(`/orders/${res.id}`);
-        }, 3000);
+        }, 4000);
+      } else {
+        open(res.error);
       }
     }
   }

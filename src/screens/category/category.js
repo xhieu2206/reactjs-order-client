@@ -31,18 +31,22 @@ const Category = props => {
   useEffect(() => {
     async function fetchProducts() {
       const productService = new ProductService();
-      let products;
+      let data;
       if (props.match.path === "/categories") {
-        products = await productService.getAllProducts();
+        data = await productService.getAllProducts();
       } else if (props.match.path === "/categories/:categoryId") {
         const categoryId = props.match.params["categoryId"];
-        products = await productService.getProductsByCategoryId(categoryId);
+        data = await productService.getProductsByCategoryId(categoryId);
       }
-      setProducts(products);
+      if (!data.error) {
+        setProducts(data);
+      } else {
+        open(data.error);
+      }
     }
 
     fetchProducts();
-  }, [location, props.match])
+  }, [location, props.match, open])
 
   return (
     <div className="container">

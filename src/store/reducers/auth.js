@@ -1,12 +1,13 @@
+import Cookies from 'js-cookie';
 import { AUTH_START, AUTH_FAILED, AUTH_SUCCESS, AUTH_LOGOUT } from '../actions/actionTypes';
 
+const token = Cookies.get('token') || null;
+const user = Cookies.get('user') || {};
+
 const initState = {
-  token: null,
-  isLoggedIn: false,
-  user: {
-    email: '',
-    username: ''
-  },
+  token: token,
+  isLoggedIn: token !== null,
+  user: user,
   loading: false,
   error: ''
 }
@@ -35,7 +36,11 @@ const reducer = (state = initState, action) => {
       };
     case AUTH_LOGOUT:
       return {
-        ...initState
+        token: null,
+        isLoggedIn: false,
+        user: {},
+        loading: false,
+        error: ''
       }
     default:
       return state;
