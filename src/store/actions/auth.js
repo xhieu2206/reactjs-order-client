@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import Cookies from 'js-cookie';
 
 export const login = (username, password) => {
   return {
@@ -29,6 +30,8 @@ export const loginFailed = error => {
 }
 
 export const logout = () => {
+  Cookies.remove('token', { path: '' });
+  Cookies.remove('user', { path: '' });
   return {
     type: actionTypes.AUTH_LOGOUT
   }

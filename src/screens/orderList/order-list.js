@@ -1,29 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import classes from './order-list.module.css';
-import authGuard from '../../hoc/authGuard/auth-guard';
 import OrderService from '../../services/order.service';
-import { showModal } from '../../store/actions/modal';
+import MessageContext from '../../context/message-context';
 
 const OrderList = props => {
+  const { open } = useContext(MessageContext);
   const [orders, setOrders] = useState([]);
-  const { token, openModal } = props;
+  const { token } = props;
 
   useEffect(() => {
     const orderService = new OrderService();
     async function fetchOrders() {
-      const data = await orderService.all(token);
+      const data = await orderService.getAllOrders(token);
       if (!data.error) {
         setOrders(data);
       } else {
-        openModal(data.error);
+        open(data.error);
       }
     }
 
     fetchOrders();
-  }, [token, openModal]);
+  }, [token, open]);
 
   return (
     <div className="container">
@@ -82,10 +82,5 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    openModal: (message) => dispatch(showModal(message))
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(authGuard(OrderList, true));
+export default connect(mapStateToProps, null)(OrderList);

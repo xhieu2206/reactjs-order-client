@@ -15,11 +15,9 @@ import createSagaMiddleware from 'redux-saga';
 import { watchAuth } from './store/sagas/auth';
 
 import authReducer from './store/reducers/auth';
-import modalReducer from './store/reducers/modal';
 
 const rootReducer = combineReducers({
-  auth: authReducer,
-  modal: modalReducer
+  auth: authReducer
 })
 
 const sagaMiddleware = createSagaMiddleware();

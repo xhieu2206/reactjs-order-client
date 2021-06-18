@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { useLocation, withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import ProductDetail from '../../components/productDetail/product-detail';
-import authGuard from '../../hoc/authGuard/auth-guard';
-import OrderForm from '../../components/orderForm/order-form';
 import classes from './create.module.css'
+import ProductDetail from '../../components/productDetail/product-detail';
+import MessageContext from '../../context/message-context';
+import OrderForm from '../../components/orderForm/order-form';
 import ProductService from '../../services/product.service';
-import { showModal } from '../../store/actions/modal';
 
 const Create = (props) => {
   const [product, setProduct] = useState({});
+  const { open } = useContext(MessageContext);
   const location = useLocation();
-  const { match, history, openModal } = props;
+  const { match, history } = props;
 
   useEffect(() => {
     async function fetchProduct() {
@@ -22,12 +22,12 @@ const Create = (props) => {
       if (!data.error) {
         setProduct(data);
       } else {
-        openModal(data.error);
+        open(data.error);
       }
     }
 
     fetchProduct()
-  }, [match, history, location, openModal]);
+  }, [match, history, location, open]);
 
   return (
     <div className={classes.OrderCreateContainer}>
@@ -45,10 +45,4 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    openModal: (message) => dispatch(showModal(message))
-  }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(authGuard(Create, true)));
+export default withRouter(connect(mapStateToProps, null)(Create));

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import { login } from '../../store/actions/auth';
 import { withRouter } from 'react-router-dom';
-import authGuard from '../../hoc/authGuard/auth-guard';
 import Input from '../../components/UI/input/input';
 import Button from '../../components/UI/Button/Button';
 
@@ -110,4 +109,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(authGuard(Login, false)));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

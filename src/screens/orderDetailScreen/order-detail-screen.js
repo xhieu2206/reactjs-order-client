@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { useLocation, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import classes from './order-detail-screen.module.css';
 import OrderService from '../../services/order.service';
 import Button from '../../components/UI/Button/Button';
-import { showModal } from '../../store/actions/modal';
+import MessageContext from '../../context/message-context';
 
 const OrderDetailScreen = (props) => {
   const [order, setOrder] = useState({});
+  const { open } = useContext(MessageContext);
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
   const location = useLocation();
-  const { match, token, openModal } = props;
+  const { match, token } = props;
 
   useEffect(() => {
     const orderService = new OrderService();
     async function fetchOrder() {
-      const data = await orderService.get(match.params.id, token);
+      const data = await orderService.getOrderById(match.params.id, token);
       if (!data.error) {
         setOrder(data);
       } else {
-        openModal(data.error);
+        open(data.error);
       }
     }
 
     fetchOrder();
-  }, [location, match, token, openModal]);
+  }, [location, match, token, open]);
 
   const onCancelOrderClickedHandler = async () => {
     const orderService = new OrderService();
@@ -34,11 +35,11 @@ const OrderDetailScreen = (props) => {
     if (!data.error) {
       setTimeout(async () => {
         setIsProcessingOrder(false);
-        const cancelOrder = await orderService.get(data.id, token);
+        const cancelOrder = await orderService.getOrderById(data.id, token);
         setOrder(cancelOrder);
       }, 2000);
     } else {
-      openModal(data.error);
+      open(data.error);
     }
   }
 
@@ -92,15 +93,8 @@ const OrderDetailScreen = (props) => {
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.token,
-    isModalDisplay: state.modal.isDisplay
+    token: state.auth.token
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    openModal: (message) => dispatch(showModal(message))
-  }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OrderDetailScreen));
+export default withRouter(connect(mapStateToProps, null)(OrderDetailScreen));

@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as actionTypes from '../actions/actionTypes';
 import { loginStart, loginSuccess, loginFailed } from '../actions/auth';
 import { ENTRY_POINT } from '../../constants/URLs';
+import Cookies from 'js-cookie';
 
 function* loginUser(action) {
   yield put(loginStart());
@@ -12,10 +13,8 @@ function* loginUser(action) {
       username: action.username,
       password: action.password
     });
-    localStorage.setItem('token', res.data.access_token);
-    localStorage.setItem('user', JSON.stringify(res.data.user));
-    document.cookie = `token=${res.data.access_token}`;
-    document.cookie = `user=${JSON.stringify(res.data.user)}`;
+    Cookies.set('token', res.data.access_token);
+    Cookies.set('user', res.data.user);
     yield put(loginSuccess(res.data.access_token, res.data.user));
   } catch(e) {
     yield put(loginFailed(e.response.data.message));

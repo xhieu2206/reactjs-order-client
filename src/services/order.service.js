@@ -2,23 +2,27 @@ import axios from 'axios';
 import { ENTRY_POINT } from '../constants/URLs';
 
 export default class OrderService {
-  async all(token) {
+  async getAllOrders(token) {
     try {
       const res = await axios.get(`${ENTRY_POINT}/orders`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
       })
+      if (res.data.length === 0) {
+        return {
+          error: `You haven't had any orders yet`
+        }
+      }
       return res.data;
     } catch(e) {
-      const error = e.response.data.message === 'Not Found' ? `You haven't had any orders yet` : 'Error while trying to get all the orders';
       return {
-        error: error
+        error: 'Error while trying to get all the orders'
       }
     }
   }
 
-  async create({ productName, image, quantity, deliveryAddress, customerName, phone, email }, token) {
+  async createOrder({ productName, image, quantity, deliveryAddress, customerName, phone, email }, token) {
     try {
       const res = await axios.post(`${ENTRY_POINT}/orders`, {
         productName, image, quantity, deliveryAddress, customerName, phone, email
@@ -35,7 +39,7 @@ export default class OrderService {
     }
   }
 
-  async get(id, token) {
+  async getOrderById(id, token) {
     try {
       const res = await axios.get(`${ENTRY_POINT}/orders/${id}`, {
         headers: {

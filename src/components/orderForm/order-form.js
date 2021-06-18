@@ -41,7 +41,7 @@ const OrderForm = (props) => {
     setValidation(updateValidate);
     const orderService = new OrderService();
     if (validation.email.isValidate && validation.name.isValidate && validation.address.isValidate && validation.phone.isValidate) {
-      const res = await orderService.create({
+      const res = await orderService.createOrder({
         productName: props.product.name,
         image: props.product.image,
         quantity,

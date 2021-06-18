@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { withRouter, useLocation } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -6,13 +6,13 @@ import Categories from '../../components/categories/categories';
 import Products from '../../components/products/products';
 import CategoryService from '../../services/category.service';
 import ProductService from '../../services/product.service';
-import { showModal } from '../../store/actions/modal';
+import MessageContext from '../../context/message-context';
 
 const Category = props => {
+  const { open } = useContext(MessageContext);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const location = useLocation();
-  const { openModal } = props;
 
   useEffect(() => {
     async function fetchCategories() {
@@ -21,12 +21,12 @@ const Category = props => {
       if (!data.error) {
         setCategories(data);
       } else {
-        openModal(data.error);
+        open(data.error);
       }
     }
 
     fetchCategories();
-  }, [openModal]);
+  }, [open]);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -60,10 +60,4 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    openModal: (message) => dispatch(showModal(message))
-  }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Category));
+export default withRouter(connect(mapStateToProps, null)(Category));
